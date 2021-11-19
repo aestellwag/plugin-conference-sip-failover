@@ -20,14 +20,17 @@ exports.handler = TokenValidator(async (context, event, callback) => {
 
     const {
         conferenceSID,
-        vendorPrimaryTarget,
+        vendorTarget,
         vid
     } = event;
 
-    console.log(`Adding ${vendorPrimaryTarget} to named conference ${conferenceSID}`);
+    Object.keys(event).forEach(key => {
+        console.log(`${key}: ${event[key]}`);
+    });
+    console.log(`Adding ${vendorTarget} to named conference ${conferenceSID}`);
     
     const client = context.getTwilioClient();
-    const to = vendorPrimaryTarget;
+    const to = vendorTarget;
     const from = vid;
 
     try {

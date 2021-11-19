@@ -30,7 +30,7 @@ exports.handler = TokenValidator(async (context, event, callback) => {
         xh2
     } = event;
 
-    console.log(`Adding ${vendorTarget} to named conference ${conferenceSID}`);
+    console.log(`Adding ${vendorPrimaryTarget} to named conference ${conferenceSID}`);
     
     const client = context.getTwilioClient();
 
