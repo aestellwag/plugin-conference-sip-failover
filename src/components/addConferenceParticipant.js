@@ -22,6 +22,7 @@ const ButtonContainer = styled('div')`
 `;
 
 class AddConferenceParticipant extends React.PureComponent {
+
   addConferenceParticipant = () => {
 
     const { task } = this.props;
@@ -33,13 +34,15 @@ class AddConferenceParticipant extends React.PureComponent {
     // The vendorTarget will be our target
     // The vid = the Vehicle ID/number that should be passed to the vendors - AKA the FROM or ANI
     const targetType = "PSTN";
-    const vendorTarget = "+13172222222";
+    const vendorPrimaryTarget = "sip:+13179519753@pstest.sip.twilio.com";
+    const vendorSecondaryTarget = "+13172222222@pstest.sip.twilio.com";
+    const vendorPSTNfallback = "+13172222222";
     const vid = "+17656363406"
 
     // We could technically have one function do all the transfer, but I'm splitting it up for visibility sake
     // note you can consolidate into one by doing a check or passing in the targetType to the function vs the plugin itself :)
     if (targetType == "PSTN") {
-      ConferenceService.addParticipantPSTN(conferenceSID, vendorTarget, vid);
+      ConferenceService.addParticipantPSTN(conferenceSID, vendorPrimaryTarget, vid);
     } else {
       // TODO: Will pull from tasks if x-headers exist, may just do this as an array or object to pass into the event payload
       // For the SIP use case only
@@ -47,7 +50,7 @@ class AddConferenceParticipant extends React.PureComponent {
       const xh1 = "test1";
       const xh2title = "test2";
       const xh2 = "test2";
-      ConferenceService.addParticipantSIP(conferenceSID, vendorTarget, vid);
+      ConferenceService.addParticipantSIP(conferenceSID, vendorPrimaryTarget, vendorSecondaryTarget, vendorPSTNfallback , vid, xh1title, xh1, xh2title, xh2);
     }
   }
 
@@ -60,7 +63,7 @@ class AddConferenceParticipant extends React.PureComponent {
       <ButtonContainer>
         <IconButton
           icon="Alert"
-          disabled={!isLiveCall}
+          disabled={ !isLiveCall  }
           onClick={this.addConferenceParticipant}
           title={vendorName}
           themeOverride={this.props.theme.CallCanvas.Button}

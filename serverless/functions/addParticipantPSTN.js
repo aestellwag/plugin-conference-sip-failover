@@ -20,14 +20,14 @@ exports.handler = TokenValidator(async (context, event, callback) => {
 
     const {
         conferenceSID,
-        vendorTarget,
+        vendorPrimaryTarget,
         vid
     } = event;
 
-    console.log(`Adding ${vendorTarget} to named conference ${conferenceSID}`);
+    console.log(`Adding ${vendorPrimaryTarget} to named conference ${conferenceSID}`);
     
     const client = context.getTwilioClient();
-    const to = vendorTarget;
+    const to = vendorPrimaryTarget;
     const from = vid;
 
     try {
@@ -41,7 +41,7 @@ exports.handler = TokenValidator(async (context, event, callback) => {
               label: 'psap-rsa',
               endConferenceOnExit: false
           })
-      } catch (error){
+    } catch (error){
       console.error(error);
     }
     console.log('Participant response properties:');

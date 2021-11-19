@@ -20,7 +20,9 @@ exports.handler = TokenValidator(async (context, event, callback) => {
 
     const {
         conferenceSID,
-        vendorTarget,
+        vendorPrimaryTarget,
+        vendorSecondaryTarget,
+        vendorPSTNfallback,
         vid,
         xh1title,
         xh1,
@@ -34,7 +36,7 @@ exports.handler = TokenValidator(async (context, event, callback) => {
 
     // This is a custom SIP target with support for Custom Headers, TLS Support and Secure Media (SRTP)
     
-    const to = `${vendorTarget}?x-${xh1title}=${xh1}&x-${xh2title}=${xh2};transport=tls;secure=true`;
+    const to = `${vendorPrimaryTarget}?x-${xh1title}=${xh1}&x-${xh2title}=${xh2};transport=tls;secure=true`;
     const from = vid;
 
     try {
@@ -48,7 +50,7 @@ exports.handler = TokenValidator(async (context, event, callback) => {
               label: 'psap-rsa',
               endConferenceOnExit: false
           })
-      } catch (error){
+    } catch (error){
       console.error(error);
     }
     console.log('Participant response properties:');
