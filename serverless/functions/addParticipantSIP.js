@@ -24,41 +24,43 @@ exports.handler = TokenValidator(async (context, event, callback) => {
         vendorSecondaryTarget,
         vendorPSTNfallback,
         vid,
-        xh1title,
-        xh1,
-        xh2title,
-        xh2
     } = event;
+
+    // Here just to see what is within the event payload - this can be removed if needed
+    // Object.keys(event).forEach(key => {
+    //     console.log(`${key}: ${event[key]}`);
+    // });
 
     console.log(`Adding ${vendorPrimaryTarget} to named conference ${conferenceSID}`);
     
     const client = context.getTwilioClient();
-
-    // This is a custom SIP target with support for Custom Headers, TLS Support and Secure Media (SRTP)
     
-    const to = `${vendorPrimaryTarget}?x-${xh1title}=${xh1}&x-${xh2title}=${xh2};transport=tls;secure=true`;
+    const to = vendorPrimaryTarget;
     const from = vid;
 
+    //IMPORTANT UPDATE STEP:  Ensure the statusCallback is pointed to your function URL below!!!
     try {
-      participantResponse = await client
+      const participantResponse = await client
           .conferences(conferenceSID)
           .participants
           .create({
               to,
               from,
-              earlyMedia: true,
+              earlyMedia: false,
               label: 'psap-rsa',
-              endConferenceOnExit: false
+              endConferenceOnExit: false,
+              statusCallbackEvent: ['initiated', 'answered', 'ringing', 'completed'],
+              statusCallback: `https://toyota-testing-3394.twil.io/failover_SIPB_statusCallback?vendorSecondaryTarget=${vendorSecondaryTarget}&vendorPSTNfallback=${vendorPSTNfallback}&conference=${conferenceSID}`,
+              statusCallbackMethod: 'POST'
           })
+
+      response.setBody({
+        status: 200,
+        participantResponse
+      });
     } catch (error){
       console.error(error);
     }
-    console.log('Participant response properties:');
-    
-    response.setBody({
-      status: 200,
-      participantResponse
-    });
 
     return callback(null, response);
 

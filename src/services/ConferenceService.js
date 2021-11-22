@@ -7,18 +7,18 @@ class ConferenceService {
 
   // We are calling the Add Participant PSTN Twilio function
   // passing the conferenceSID and the target
-  addParticipantPSTN = (conferenceSID, vendorTarget, vid) => {
-    console.log(`Passing conference: ${conferenceSID}, attempting to add: ${vendorTarget} to the conference`);
+  addParticipantPSTN = (conferenceSID, vendorPrimaryTarget, vid) => {
+    console.log(`Passing conference: ${conferenceSID}, attempting to add: ${vendorPrimaryTarget} to the conference`);
     return new Promise((resolve, reject) => {
       request('addParticipantPSTN', this.manager, {
         conferenceSID,
-        vendorTarget,
+        vendorPrimaryTarget,
         vid
       }).then(response => {
-        console.log(`Succefully added ${vendorTarget} to the conference`, response);
+        console.log(`Succefully added ${vendorPrimaryTarget} to the conference`, response);
         resolve();
       }).catch(error => {
-        console.error(`Error adding ${vendorTarget} to the conference`, error);
+        console.error(`Error adding ${vendorPrimaryTarget} to the conference`, error);
         reject(error);
       });
     });
@@ -26,18 +26,20 @@ class ConferenceService {
 
   // We are calling the Add Participant SIP Twilio function
   // passing the conferenceSID and the target
-  addParticipantSIP = (conferenceSID, vendorTarget, vid) => {
-    console.log(`Passing conference: ${conferenceSID}, attempting to add: ${vendorTarget} to the conference`);
+  addParticipantSIP = (conferenceSID, vendorPrimaryTarget, vendorSecondaryTarget, vendorPSTNfallback , vid) => {
+    console.log(`Passing conference: ${conferenceSID}, attempting to add: ${vendorPrimaryTarget} to the conference`);
     return new Promise((resolve, reject) => {
       request('addParticipantSIP', this.manager, {
         conferenceSID,
-        vendorTarget,
+        vendorPrimaryTarget,
+        vendorSecondaryTarget,
+        vendorPSTNfallback,
         vid
       }).then(response => {
-        console.log(`Succefully added ${vendorTarget} to the conference`, response);
+        console.log(`Succefully added ${vendorPrimaryTarget} to the conference`, response);
         resolve();
       }).catch(error => {
-        console.error(`Error adding ${vendorTarget} to the conference`, error);
+        console.error(`Error adding ${vendorPrimaryTarget} to the conference`, error);
         reject(error);
       });
     });
