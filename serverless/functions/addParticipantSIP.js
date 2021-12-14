@@ -40,7 +40,7 @@ exports.handler = TokenValidator(async (context, event, callback) => {
 
     //IMPORTANT UPDATE STEP:  Ensure the statusCallback is pointed to your function URL below!!!
     try {
-      const participantResponse = await client
+      participantResponse = await client
           .conferences(conferenceSID)
           .participants
           .create({
@@ -53,14 +53,14 @@ exports.handler = TokenValidator(async (context, event, callback) => {
               statusCallback: `https://toyota-testing-3394.twil.io/failover_SIPB_statusCallback?vendorSecondaryTarget=${vendorSecondaryTarget}&vendorPSTNfallback=${vendorPSTNfallback}&conference=${conferenceSID}`,
               statusCallbackMethod: 'POST'
           })
-
-      response.setBody({
-        status: 200,
-        participantResponse
-      });
     } catch (error){
       console.error(error);
     }
+    
+    response.setBody({
+      status: 200,
+      participantResponse
+    });
 
     return callback(null, response);
 

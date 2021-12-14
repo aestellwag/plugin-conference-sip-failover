@@ -48,7 +48,6 @@ exports.handler = TokenValidator(async (context, event, callback) => {
     } catch (error){
       console.error(error);
     }
-    console.log('Participant response properties:');
     
     response.setBody({
       status: 200,

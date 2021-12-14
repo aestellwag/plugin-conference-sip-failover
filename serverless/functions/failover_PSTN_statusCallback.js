@@ -1,5 +1,16 @@
 exports.handler = async (context, event, callback) => { 
 
+  // '*' allows being called from any origin, this not the best security
+  // practice and should only be used for testing; when builiding
+  // a production plugin you should set the allowed origin to
+  // 'https://flex.twilio.com' (or any custom domain serving the plugin)
+
+  const response = new Twilio.Response();
+  response.appendHeader('Access-Control-Allow-Origin', '*');
+  response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST');
+  response.appendHeader('Content-Type', 'application/json');
+  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type'); 
+
   console.log('PSTN - Status Callback');
 
   // Here just to see what is within the event payload - this can be removed if needed
@@ -25,7 +36,7 @@ console.log(`Adding ${vendorPSTNfallback} to named conference ${conferenceSID}`)
 
     //IMPORTANT UPDATE STEP:  Ensure the statusCallback is pointed to your function URL below!!!
     try {
-      const participantResponse = await client
+      participantResponse = await client
           .conferences(conferenceSID)
           .participants
           .create({
@@ -35,14 +46,13 @@ console.log(`Adding ${vendorPSTNfallback} to named conference ${conferenceSID}`)
               label: 'psap-rsa',
               endConferenceOnExit: false
           })
-
-      response.setBody({
-        status: 200,
-        participantResponse
-      });
     } catch (error){
       console.error(error);
     }
+    response.setBody({
+      status: 200,
+      participantResponse
+    });
     return callback(null, response);
   } else {
     return callback(null);
