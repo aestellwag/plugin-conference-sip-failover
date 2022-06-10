@@ -20,19 +20,23 @@ exports.handler = async (context, event, callback) => {
   // });
   
   // Pulled from the query paramaters in the addParticipantSIP statusCallback URL
-  const vendorPSTNfallback = event.vendorPSTNfallback;
-  const conferenceSID = event.conference;
 
-  console.log(`vendorPSTNfallback = ${vendorPSTNfallback}`);
+  const {
+    didPSTNfallback,
+    conferenceSID,
+    Caller
+  } = event;
+
+  console.log(`didPSTNfallback = ${didPSTNfallback}`);
   console.log(`conferenceSID = ${conferenceSID}`);
 
   if(event.CallStatus === "failed") {
-console.log(`Adding ${vendorPSTNfallback} to named conference ${conferenceSID}`);
+console.log(`Adding ${didPSTNfallback} to named conference ${conferenceSID}`);
     
     const client = context.getTwilioClient();
     
-    const to = vendorPSTNfallback;
-    const from = event.Caller;
+    const to = didPSTNfallback;
+    const from = Caller;
 
     //IMPORTANT UPDATE STEP:  Ensure the statusCallback is pointed to your function URL below!!!
     try {
@@ -43,7 +47,7 @@ console.log(`Adding ${vendorPSTNfallback} to named conference ${conferenceSID}`)
               to,
               from,
               earlyMedia: true,
-              label: 'psap-rsa',
+              label: 'customer',
               endConferenceOnExit: false
           })
     } catch (error){

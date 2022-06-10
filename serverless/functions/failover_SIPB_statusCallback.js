@@ -20,21 +20,25 @@ exports.handler = async (context, event, callback) => {
   // });
   
   // Pulled from the query paramaters in the addParticipantSIP statusCallback URL
-  const vendorSecondaryTarget = event.vendorSecondaryTarget;
-  const vendorPSTNfallback = event.vendorPSTNfallback;
-  const conferenceSID = event.conference;
 
-  console.log(`vendorSecondaryTarget = ${vendorSecondaryTarget}`);
-  console.log(`vendorPSTNfallback = ${vendorPSTNfallback}`);
+  const {
+    sipSecondaryTarget,
+    didPSTNfallback,
+    conferenceSID,
+    Caller
+  } = event;
+
+  console.log(`sipSecondaryTarget = ${sipSecondaryTarget}`);
+  console.log(`didPSTNfallback = ${didPSTNfallback}`);
   console.log(`conferenceSID = ${conferenceSID}`);
 
   if(event.CallStatus === "failed") {
-console.log(`Adding ${vendorSecondaryTarget} to named conference ${conferenceSID}`);
+console.log(`Adding ${sipSecondaryTarget} to named conference ${conferenceSID}`);
     
     const client = context.getTwilioClient();
     
-    const to = vendorSecondaryTarget;
-    const from = event.Caller;
+    const to = sipSecondaryTarget;
+    const from = Caller;
 
     //IMPORTANT UPDATE STEP:  Ensure the statusCallback is pointed to your function URL below!!!
     try {
@@ -45,10 +49,10 @@ console.log(`Adding ${vendorSecondaryTarget} to named conference ${conferenceSID
               to,
               from,
               earlyMedia: false,
-              label: 'psap-rsa',
+              label: 'customer',
               endConferenceOnExit: false,
               statusCallbackEvent: ['initiated', 'answered', 'ringing', 'completed'],
-              statusCallback: `https://toyota-testing-3394.twil.io/failover_PSTN_statusCallback?vendorPSTNfallback=${vendorPSTNfallback}&conference=${conferenceSID}`,
+              statusCallback: `https://toyota-testing-3394.twil.io/failover_PSTN_statusCallback?didPSTNfallback=${didPSTNfallback}&conferenceSID=${conferenceSID}`,
               statusCallbackMethod: 'POST'
           })
     } catch (error){

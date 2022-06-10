@@ -7,39 +7,38 @@ class ConferenceService {
 
   // We are calling the Add Participant PSTN Twilio function
   // passing the conferenceSID and the target
-  addParticipantPSTN = (conferenceSID, vendorPrimaryTarget, vid) => {
-    console.log(`Passing conference: ${conferenceSID}, attempting to add: ${vendorPrimaryTarget} to the conference`);
+  addParticipantPSTN = (conferenceSID, toNumber, callerID) => {
+    console.log(`Passing conference: ${conferenceSID}, attempting to add: ${toNumber} to the conference`);
     return new Promise((resolve, reject) => {
       request('addParticipantPSTN', this.manager, {
         conferenceSID,
-        vendorPrimaryTarget,
-        vid
+        toNumber,
+        callerID
       }).then(response => {
-        console.log(`Succefully added ${vendorPrimaryTarget} to the conference`, response);
+        console.log(`Succefully added ${toNumber} to the conference`, response);
         resolve();
       }).catch(error => {
-        console.error(`Error adding ${vendorPrimaryTarget} to the conference`, error);
+        console.error(`Error adding ${toNumber} to the conference`, error);
         reject(error);
       });
     });
   }
-
   // We are calling the Add Participant SIP Twilio function
   // passing the conferenceSID and the target
-  addParticipantSIP = (conferenceSID, vendorPrimaryTarget, vendorSecondaryTarget, vendorPSTNfallback , vid) => {
-    console.log(`Passing conference: ${conferenceSID}, attempting to add: ${vendorPrimaryTarget} to the conference`);
+  addParticipantSIP = (conferenceSID, sipPrimaryTarget, sipSecondaryTarget, didPSTNfallback , callerID) => {
+    console.log(`Passing conference: ${conferenceSID}, attempting to add: ${sipPrimaryTarget} to the conference`);
     return new Promise((resolve, reject) => {
       request('addParticipantSIP', this.manager, {
         conferenceSID,
-        vendorPrimaryTarget,
-        vendorSecondaryTarget,
-        vendorPSTNfallback,
-        vid
+        sipPrimaryTarget,
+        sipSecondaryTarget,
+        didPSTNfallback,
+        callerID
       }).then(response => {
-        console.log(`Succefully added ${vendorPrimaryTarget} to the conference`, response);
+        console.log(`Succefully added ${sipPrimaryTarget} to the conference`, response);
         resolve();
       }).catch(error => {
-        console.error(`Error adding ${vendorPrimaryTarget} to the conference`, error);
+        console.error(`Error adding ${sipPrimaryTarget} to the conference`, error);
         reject(error);
       });
     });

@@ -20,10 +20,10 @@ exports.handler = TokenValidator(async (context, event, callback) => {
 
     const {
         conferenceSID,
-        vendorPrimaryTarget,
-        vendorSecondaryTarget,
-        vendorPSTNfallback,
-        vid,
+        sipPrimaryTarget,
+        sipSecondaryTarget,
+        didPSTNfallback,
+        callerID,
     } = event;
 
     // Here just to see what is within the event payload - this can be removed if needed
@@ -31,12 +31,12 @@ exports.handler = TokenValidator(async (context, event, callback) => {
     //     console.log(`${key}: ${event[key]}`);
     // });
 
-    console.log(`Adding ${vendorPrimaryTarget} to named conference ${conferenceSID}`);
+    console.log(`Adding ${sipPrimaryTarget} to named conference ${conferenceSID}`);
     
     const client = context.getTwilioClient();
     
-    const to = vendorPrimaryTarget;
-    const from = vid;
+    const to = sipPrimaryTarget;
+    const from = callerID;
 
     //IMPORTANT UPDATE STEP:  Ensure the statusCallback is pointed to your function URL below!!!
     try {
@@ -47,10 +47,10 @@ exports.handler = TokenValidator(async (context, event, callback) => {
               to,
               from,
               earlyMedia: false,
-              label: 'psap-rsa',
+              label: 'customer',
               endConferenceOnExit: false,
               statusCallbackEvent: ['initiated', 'answered', 'ringing', 'completed'],
-              statusCallback: `https://toyota-testing-3394.twil.io/failover_SIPB_statusCallback?vendorSecondaryTarget=${vendorSecondaryTarget}&vendorPSTNfallback=${vendorPSTNfallback}&conference=${conferenceSID}`,
+              statusCallback: `https://toyota-testing-3394.twil.io/failover_SIPB_statusCallback?sipSecondaryTarget=${sipSecondaryTarget}&didPSTNfallback=${didPSTNfallback}&conferenceSID=${conferenceSID}`,
               statusCallbackMethod: 'POST'
           })
     } catch (error){

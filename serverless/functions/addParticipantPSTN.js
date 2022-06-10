@@ -20,19 +20,20 @@ exports.handler = TokenValidator(async (context, event, callback) => {
 
     const {
         conferenceSID,
-        vendorTarget,
-        vid
+        toNumber,
+        callerID
     } = event;
 
     // Here just to see what is within the event payload - this can be removed if needed
     // Object.keys(event).forEach(key => {
     //     console.log(`${key}: ${event[key]}`);
     // });
-    console.log(`Adding ${vendorTarget} to named conference ${conferenceSID}`);
+
+    console.log(`Adding ${toNumber} to named conference ${conferenceSID}`);
     
     const client = context.getTwilioClient();
-    const to = vendorTarget;
-    const from = vid;
+    const to = toNumber;
+    const from = callerID;
 
     try {
       participantResponse = await client
@@ -42,7 +43,7 @@ exports.handler = TokenValidator(async (context, event, callback) => {
               to,
               from,
               earlyMedia: true,
-              label: 'psap-rsa',
+              label: 'customer',
               endConferenceOnExit: false
           })
     } catch (error){
