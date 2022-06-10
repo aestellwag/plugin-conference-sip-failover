@@ -80,7 +80,7 @@ Copy the domain as you'll need this for the .env in the next step
 From the root plugin directory rename the .env.example file to .env and change the below:
 ```bash
 cd ..
-cd plugin-supervisor-barge-coach
+cd plugin-conference-sip-failover
 
 var REACT_APP_SERVICE_BASE_URL = 
 Points to the Twilio Function Service URL (example: https://sip-failover-XXXX-dev.twil.io)
@@ -130,6 +130,13 @@ You are all set to test the SIP Failover features on your Flex instance!
 ---
 
 ## Changelog
+
+### 0.2.0
+
+**June 10, 2022**
+
+- Cleaned up Comments and Templatized Variables/Functions
+- Next Update will include UI enhancements and push to 1.0 release
 
 ### 0.1.0
 
