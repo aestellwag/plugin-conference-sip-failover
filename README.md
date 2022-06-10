@@ -2,11 +2,11 @@
 <img  src="https://static0.twilio.com/marketing/bundles/marketing/img/logos/wordmark-red.svg"  alt="Twilio"  width="250"  />
 </a>
 
-# Twilio Flex Plugin - SIP Failover for SIP Endpoints 
+# Twilio Flex Plugin - SIP Conference with Failover 
 
 Twilio Flex Plugins allow you to customize the appearance and behavior of [Twilio Flex](https://www.twilio.com/flex). If you want to learn more about the capabilities and how to use the API, check out our [Flex documentation](https://www.twilio.com/docs/flex).
 
-This plugin provides the ability to add SIP endpoints to with failover to an alter SIP endpoint and also a third failover to PSTN/DID dialing.
+This plugin provides the ability to add a SIP or PSTN target within the Flex UI during a call. This also includes the ability ofailover to an alternate SIP target, and failback to PSTN/DID if the Primary and Secondary SIP Targets are down.  This plugin is primary focused on enabling dialing to a SIP Endpoint or directing calls over a BYOC Trunk within the Flex UI during a conference.
 
 ## Pre-req
 
